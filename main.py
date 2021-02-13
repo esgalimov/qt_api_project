@@ -22,6 +22,7 @@ class Example(QMainWindow, Ui_MainWindow):
         self.initUI()
 
     def initUI(self):
+        self.action.triggered.connect(self.clear_mark)
         self.pushButton_gibrid.clicked.connect(self.change_type)
         self.pushButton_sputnik.clicked.connect(self.change_type)
         self.pushButton_sxema.clicked.connect(self.change_type)
@@ -101,6 +102,10 @@ class Example(QMainWindow, Ui_MainWindow):
             LATTITUDE -= SPN[1]
             if LATTITUDE < -85:
                 LATTITUDE = -85
+        self.new_map()
+
+    def clear_mark(self):
+        PT.clear()
         self.new_map()
 
 
