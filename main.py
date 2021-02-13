@@ -1,8 +1,8 @@
 import os
 import sys
-from map import map
+from map import map, find_toponym
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit
 from PyQt5.QtCore import Qt
 from qt.qt import *
 
@@ -12,24 +12,26 @@ LATTITUDE = 55
 SPN = [25, 18.75]
 TYPE_OF_MAP = 'map'
 NAMES = ['map.png', 'map.jpg']
+PT = []
 
 
 class Example(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        map(LONGITUDE, LATTITUDE, SPN, TYPE_OF_MAP, FILE_NAME)
         self.initUI()
 
     def initUI(self):
         self.pushButton_gibrid.clicked.connect(self.change_type)
         self.pushButton_sputnik.clicked.connect(self.change_type)
         self.pushButton_sxema.clicked.connect(self.change_type)
+        self.pushButton_find.clicked.connect(self.find_place)
         self.pixmap = QPixmap(FILE_NAME)
         self.new_map()
         self.key_list = [Qt.Key_PageUp, Qt.Key_PageDown,
                          Qt.Key_Left, Qt.Key_Right,
                          Qt.Key_Up, Qt.Key_Down]
+        self.oldKeyPressEvent = self.textEdit.keyPressEvent
         self.textEdit.keyPressEvent = self.newKeyPressEvent
 
     def change_type(self):
@@ -45,8 +47,18 @@ class Example(QMainWindow, Ui_MainWindow):
             FILE_NAME = NAMES[0]
         self.new_map()
 
+    def find_place(self):
+        global LONGITUDE, LATTITUDE, PT
+        toponym = self.textEdit.toPlainText()
+        new_coords = find_toponym(toponym)
+        if new_coords:
+            LONGITUDE = new_coords[0]
+            LATTITUDE = new_coords[1]
+            PT.append(','.join([str(new_coords[0]), str(new_coords[1])]) + ',org')
+            self.new_map()
+
     def new_map(self):
-        map(LONGITUDE, LATTITUDE, SPN, TYPE_OF_MAP, FILE_NAME)
+        map(LONGITUDE, LATTITUDE, SPN, TYPE_OF_MAP, FILE_NAME, PT)
         self.pixmap = QPixmap(FILE_NAME)
         self.map.setPixmap(self.pixmap)
         self.map.update()
@@ -61,7 +73,7 @@ class Example(QMainWindow, Ui_MainWindow):
         if event.key() in self.key_list:
             self.keyPressEvent(event)
         else:
-            super().keyPressEvent(event)
+            self.oldKeyPressEvent(event)
 
     def keyPressEvent(self, event):
         global SPN, LONGITUDE, LATTITUDE
@@ -92,8 +104,13 @@ class Example(QMainWindow, Ui_MainWindow):
         self.new_map()
 
 
+def except_hook(cls, exception, traceback):
+    sys.__excepthook__(cls, exception, traceback)
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = Example()
     ex.show()
+    sys.excepthook = except_hook
     sys.exit(app.exec_())
