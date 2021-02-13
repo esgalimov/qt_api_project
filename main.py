@@ -9,8 +9,7 @@ from qt.qt import *
 FILE_NAME = 'map.png'
 LONGITUDE = 33
 LATTITUDE = 55
-SPN = 25
-MOVE = 10
+SPN = [25, 18.75]
 TYPE_OF_MAP = 'map'
 NAMES = ['map.png', 'map.jpg']
 
@@ -26,9 +25,12 @@ class Example(QMainWindow, Ui_MainWindow):
         self.pushButton_gibrid.clicked.connect(self.change_type)
         self.pushButton_sputnik.clicked.connect(self.change_type)
         self.pushButton_sxema.clicked.connect(self.change_type)
-
         self.pixmap = QPixmap(FILE_NAME)
         self.new_map()
+        self.key_list = [Qt.Key_PageUp, Qt.Key_PageDown,
+                         Qt.Key_Left, Qt.Key_Right,
+                         Qt.Key_Up, Qt.Key_Down]
+        self.textEdit.keyPressEvent = self.newKeyPressEvent
 
     def change_type(self):
         global TYPE_OF_MAP, FILE_NAME
@@ -54,28 +56,40 @@ class Example(QMainWindow, Ui_MainWindow):
             if os.path.exists(i):
                 os.remove(i)
 
+    # переопределяем event для textEdit
+    def newKeyPressEvent(self, event):
+        if event.key() in self.key_list:
+            self.keyPressEvent(event)
+        else:
+            super().keyPressEvent(event)
+
     def keyPressEvent(self, event):
         global SPN, LONGITUDE, LATTITUDE
         if event.key() == Qt.Key_PageUp:
-            if SPN >= 0:
-                SPN = round(SPN * 0.5, 6)
+            if SPN[0] >= 0 and SPN[1] >= 0:
+                SPN[0] = round(SPN[0] * 0.5, 6)
+                SPN[1] = round(SPN[1] * 0.5, 6)
         if event.key() == Qt.Key_PageDown:
-            if SPN < 26:
-                SPN = round(SPN * 1.5, 6)
+            if SPN[0] < 26 and SPN[1] < 26:
+                SPN[0] = round(SPN[0] * 2, 6)
+                SPN[1] = round(SPN[1] * 2, 6)
         if event.key() == Qt.Key_Left:
-            if LONGITUDE > -170:
-                LONGITUDE -= MOVE
+            LONGITUDE -= SPN[0]
+            if LONGITUDE < -180:
+                LONGITUDE = 360 + LONGITUDE
         if event.key() == Qt.Key_Right:
-            if LONGITUDE < 170:
-                LONGITUDE += MOVE
+            LONGITUDE += SPN[0]
+            if LONGITUDE > 180:
+                LONGITUDE = -360 + LONGITUDE
         if event.key() == Qt.Key_Up:
-            if LATTITUDE < 80:
-                LATTITUDE += MOVE
+            LATTITUDE += SPN[1]
+            if LATTITUDE > 85:
+                LATTITUDE = 85
         if event.key() == Qt.Key_Down:
-            if LATTITUDE > -80:
-                LATTITUDE -= MOVE
+            LATTITUDE -= SPN[1]
+            if LATTITUDE < -85:
+                LATTITUDE = -85
         self.new_map()
-        print(LONGITUDE, LATTITUDE, SPN, TYPE_OF_MAP)
 
 
 if __name__ == '__main__':
