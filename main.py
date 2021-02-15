@@ -4,7 +4,7 @@ from map import map, find_toponym
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit
 from PyQt5.QtCore import Qt
-from qt.qt import *
+from qt.qt2 import *
 
 FILE_NAME = 'map.png'
 LONGITUDE = 33
@@ -51,11 +51,12 @@ class Example(QMainWindow, Ui_MainWindow):
     def find_place(self):
         global LONGITUDE, LATTITUDE, PT
         toponym = self.textEdit.toPlainText()
-        new_coords = find_toponym(toponym)
+        new_coords = find_toponym(toponym, self.lineEdit)
         if new_coords:
             LONGITUDE = new_coords[0]
             LATTITUDE = new_coords[1]
             PT.append(','.join([str(new_coords[0]), str(new_coords[1])]) + ',org')
+            self.textEdit.clear()
             self.new_map()
 
     def new_map(self):

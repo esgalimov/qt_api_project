@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>402</width>
+    <width>442</width>
     <height>321</height>
    </rect>
   </property>
@@ -27,50 +27,9 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="3">
-     <widget class="QPushButton" name="pushButton_find">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <family>Segoe Print</family>
-        <pointsize>13</pointsize>
-       </font>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="text">
-       <string>Искать</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1" colspan="3">
-     <widget class="QLabel" name="map">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="cursor">
-       <cursorShape>CrossCursor</cursorShape>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="0" colspan="4">
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0" colspan="2">
        <widget class="QPushButton" name="pushButton_sxema">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -92,7 +51,7 @@
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="2">
        <widget class="QPushButton" name="pushButton_sputnik">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -114,7 +73,7 @@
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="3">
        <widget class="QPushButton" name="pushButton_gibrid">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -133,6 +92,19 @@
         </property>
         <property name="text">
          <string>гибрид</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="4">
+       <widget class="QLineEdit" name="lineEdit">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="dragEnabled">
+         <bool>false</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -168,6 +140,47 @@
       </property>
      </widget>
     </item>
+    <item row="1" column="1" colspan="3">
+     <widget class="QLabel" name="map">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="cursor">
+       <cursorShape>CrossCursor</cursorShape>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QPushButton" name="pushButton_find">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe Print</family>
+        <pointsize>13</pointsize>
+       </font>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="text">
+       <string>Искать</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -176,8 +189,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>402</width>
-     <height>21</height>
+     <width>442</width>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

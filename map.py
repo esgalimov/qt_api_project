@@ -2,16 +2,16 @@ import requests
 import sys
 
 
-def map(coord_1, coord_2, spn, type_of_map, file_name, pt=[]):
+def map(coord_1, coord_2, spn, type_of_map, file_name, pt=[], return_response=False):
     map_request = "https://static-maps.yandex.ru/1.x/"
     params = {
         'll': ','.join([str(coord_1), str(coord_2)]),
         'spn': ','.join([str(spn[0]), str(spn[1])]),
         'l': type_of_map,
-        'pt': '~'.join(pt)
+        'pt': '~'.join(pt),
+        'apikey': '40d1649f-0493-4b70-98ba-98533de7710b'
     }
     response = requests.get(map_request, params=params)
-
     if not response:
         print("Ошибка выполнения запроса:")
         print(map_request)
@@ -20,11 +20,12 @@ def map(coord_1, coord_2, spn, type_of_map, file_name, pt=[]):
 
     map_file = file_name
     with open(map_file, "wb") as file:
+        print(response.content)
         file.write(response.content)
 
 
 # возвращаем координаты объекта
-def find_toponym(toponym):
+def find_toponym(toponym, line_edit):
     map_request = "https://geocode-maps.yandex.ru/1.x/"
     params = {
         'apikey': '40d1649f-0493-4b70-98ba-98533de7710b',
@@ -36,13 +37,15 @@ def find_toponym(toponym):
     response = requests.get(map_request, params=params)
     if not response:
         print("Ошибка выполнения запроса:")
-        print(map_request)
         print("Http статус:", response.status_code, "(", response.reason, ")")
         sys.exit(1)
 
     else:
         try:
             response_json = response.json()
+            line_edit.setText(
+                response_json['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['metaDataProperty'][
+                    'GeocoderMetaData']['Address']['formatted'])
             toponym = response_json["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]
             toponym_coodrinates = toponym["Point"]["pos"]
             return [float(i) for i in toponym_coodrinates.split()]
